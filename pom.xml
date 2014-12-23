@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.tc</groupId>
+  <artifactId>tcsession</artifactId>
+  <version>1.5.3-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>tcsession</name>
+  <url>http://maven.apache.org</url>
+
+  <modules>
+    <module>tcsession-core</module>
+    <module>tcsession-zk</module>
+    <module>tcsession-redis</module>
+  </modules>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- sonar - 参考： - http://docs.codehaus.org/display/SONAR/Analyzing+with+Maven 
+      - http://docs.codehaus.org/display/SONAR/Analysis+Parameters - http://mojo.codehaus.org/sonar-maven-plugin/examples/use-enterprise-database.html -->
+
+    <sonar.version>2.0</sonar.version>
+    <sonar.host.url>http://10.1.10.104:9000/</sonar.host.url>
+    <sonar.jdbc.url>jdbc:postgresql://10.1.10.105:1949/sonar</sonar.jdbc.url>
+    <sonar.exclusions>
+      **/package-info.java,
+      com/tc/his/api/model/*.java
+    </sonar.exclusions>
+  </properties>
+
+  <distributionManagement>
+    <repository>
+      <id>HIS-DEV-releases</id>
+      <name>HIS-DEV-releases</name>
+      <url>http://10.1.18.74:8097/artifactory/libs-release-local</url>
+    </repository>
+    <snapshotRepository>
+      <id>HIS-DEV-snapshots</id>
+      <name>HIS-DEV-snapshots</name>
+      <url>http://10.1.18.74:8097/artifactory/libs-snapshot-local</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.2</version>
+      <scope>test</scope>
+    </dependency>
+        
+    <dependency>  
+      <groupId>org.slf4j</groupId>  
+      <artifactId>slf4j-api</artifactId>  
+      <version>1.6.2</version>  
+      <scope>compile</scope>
+    </dependency>
+    <!-- 因为别的一些三方库依赖log4j，通过传递依赖进来的log4j版本不可靠，会出现依赖com.sun.jdmk:jmxtools的问题，
+        而这个东西在74上找不到，导致编译不过。所以还是手工指明比较放心 -->
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.16</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.zookeeper</groupId>
+      <artifactId>zookeeper</artifactId>
+      <version>3.3.3</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-pool</groupId>
+      <artifactId>commons-pool</artifactId>
+      <version>1.5.4</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>${sonar.version}</version>
+      </plugin>
+    </plugins>
+
+  </build>
+</project>
+
